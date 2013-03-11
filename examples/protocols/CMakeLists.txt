@@ -11,11 +11,11 @@ tpqt_generate_mocs(${protocols_MOC_SRCS})
 
 add_executable(protocols ${protocols_SRCS} ${protocols_MOC_SRCS})
 target_link_libraries(protocols
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTDBUS_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTNETWORK_LIBRARY}
-    ${QT_QTWIDGETS_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    ${QT_QT5CORE_LIBRARY}
+    ${QT_QT5DBUS_LIBRARY}
+    ${QT_QT5GUI_LIBRARY}
+    ${QT_QT5NETWORK_LIBRARY}
+    ${QT_QT5WIDGETS_LIBRARY}
+    ${QT_QT5XML_LIBRARY}
     telepathy-qt${QT_VERSION_MAJOR}
     ${TP_QT_EXECUTABLE_LINKER_FLAGS})

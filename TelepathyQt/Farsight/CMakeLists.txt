@@ -26,8 +26,8 @@ if(FARSIGHT_COMPONENTS_FOUND)
     endif (ENABLE_COMPILER_COVERAGE)
     # Link
     target_link_libraries(telepathy-qt${QT_VERSION_MAJOR}-farsight
-        ${QT_QTDBUS_LIBRARY}
-        ${QT_QTCORE_LIBRARY}
+        ${QT_QT5DBUS_LIBRARY}
+        ${QT_QT5CORE_LIBRARY}
         ${GOBJECT_LIBRARIES}
         ${TELEPATHY_GLIB_LIBRARIES}
         ${TELEPATHY_FARSIGHT_LIBRARIES}

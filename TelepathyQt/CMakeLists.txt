@@ -765,18 +765,18 @@ endforeach(moc_src ${telepathy_qt_MOC_SRCS})
 
 # Link
 target_link_libraries(telepathy-qt${QT_VERSION_MAJOR}
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTDBUS_LIBRARY}
-    ${QT_QTNETWORK_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    ${QT_QT5CORE_LIBRARY}
+    ${QT_QT5DBUS_LIBRARY}
+    ${QT_QT5NETWORK_LIBRARY}
+    ${QT_QT5XML_LIBRARY}
     ${TP_QT_LIBRARY_LINKER_FLAGS})
 
 # Link - Library used by tests to test some unexported functionality
 target_link_libraries(telepathy-qt-test-backdoors
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTDBUS_LIBRARY}
-    ${QT_QTNETWORK_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    ${QT_QT5CORE_LIBRARY}
+    ${QT_QT5DBUS_LIBRARY}
+    ${QT_QT5NETWORK_LIBRARY}
+    ${QT_QT5XML_LIBRARY}
     ${TP_QT_LIBRARY_LINKER_FLAGS})
 
 if (ENABLE_COMPILER_COVERAGE)
@@ -950,8 +950,8 @@ if(ENABLE_EXPERIMENTAL_SERVICE_SUPPORT)
 
     # Link
     target_link_libraries(telepathy-qt${QT_VERSION_MAJOR}-service
-        ${QT_QTDBUS_LIBRARY}
-        ${QT_QTCORE_LIBRARY}
+        ${QT_QT5DBUS_LIBRARY}
+        ${QT_QT5CORE_LIBRARY}
         telepathy-qt${QT_VERSION_MAJOR}
         ${TP_QT_LIBRARY_LINKER_FLAGS})
 

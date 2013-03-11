@@ -13,12 +13,12 @@ tpqt_generate_mocs(${roster_MOC_SRCS})
 
 add_executable(roster ${roster_SRCS} ${roster_MOC_SRCS})
 target_link_libraries(roster
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTDBUS_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTNETWORK_LIBRARY}
-    ${QT_QTWIDGETS_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    ${QT_QT5CORE_LIBRARY}
+    ${QT_QT5DBUS_LIBRARY}
+    ${QT_QT5GUI_LIBRARY}
+    ${QT_QT5NETWORK_LIBRARY}
+    ${QT_QT5WIDGETS_LIBRARY}
+    ${QT_QT5XML_LIBRARY}
     telepathy-qt${QT_VERSION_MAJOR}
     ${TP_QT_EXECUTABLE_LINKER_FLAGS})
 
@@ -30,11 +30,11 @@ set(telepathy_qt_examples_roster_SRCS
 
 add_library(telepathy-qt-examples-roster ${telepathy_qt_examples_roster_SRCS})
 target_link_libraries(telepathy-qt-examples-roster
-    ${QT_QTCORE_LIBRARY}
-    ${QT_QTDBUS_LIBRARY}
-    ${QT_QTGUI_LIBRARY}
-    ${QT_QTNETWORK_LIBRARY}
-    ${QT_QTWIDGETS_LIBRARY}
-    ${QT_QTXML_LIBRARY}
+    ${QT_QT5CORE_LIBRARY}
+    ${QT_QT5DBUS_LIBRARY}
+    ${QT_QT5GUI_LIBRARY}
+    ${QT_QT5NETWORK_LIBRARY}
+    ${QT_QT5WIDGETS_LIBRARY}
+    ${QT_QT5XML_LIBRARY}
     telepathy-qt${QT_VERSION_MAJOR}
     ${TP_QT_LIBRARY_LINKER_FLAGS})

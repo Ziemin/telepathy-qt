@@ -83,12 +83,17 @@ set(QT5_MIN_VERSION "5.0.0")
 set(QT5_MAX_VERSION "6.0.0")
 find_package(Qt REQUIRED)
 
+set(TP_QT_EXECUTABLE_LINKER_FLAGS "-fPIE")
+set(TP_QT_LIBRARY_LINKER_FLAGS "-fPIC")
+
 foreach(flag ${QT_CONFIG_FLAGS})
     if (${flag} MATCHES "reduce_relocations")
         set(TP_QT_EXECUTABLE_LINKER_FLAGS "-fPIE")
         set(TP_QT_LIBRARY_LINKER_FLAGS "-fPIC")
     endif (${flag} MATCHES "reduce_relocations")
 endforeach(flag ${QT_CONFIG_FLAGS})
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -Wno-error=deprecated-declarations")
 
 # This value contains the library's SOVERSION. This value is to be increased everytime an API/ABI break
 # occurs, and will be used for the SOVERSION of the generated shared libraries.
