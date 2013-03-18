@@ -957,7 +957,6 @@ if(ENABLE_EXPERIMENTAL_SERVICE_SUPPORT)
     target_link_libraries(telepathy-qt${QT_VERSION_MAJOR}-service
         ${QT_QT5DBUS_LIBRARY}
         ${QT_QT5CORE_LIBRARY}
-        telepathy-qt${QT_VERSION_MAJOR}
         ${TP_QT_LIBRARY_LINKER_FLAGS})
 
     # Set the correct version number
