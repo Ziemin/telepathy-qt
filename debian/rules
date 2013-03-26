@@ -1,0 +1,21 @@
+#!/usr/bin/make -f
+include /usr/share/dpkg/architecture.mk
+BUILDDIR = $(CURDIR)/debian/build
+
+%:
+	dh $@ --parallel --builddirectory=$(BUILDDIR)
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DDISABLE_WERROR=ON -DHAVE_DOT=YES \
+	                     -DLIB_SUFFIX="/$(DEB_HOST_MULTIARCH)" -DENABLE_EXPERIMENTAL_SERVICE_SUPPORT=ON \
+						 -DENABLE_TESTS=FALSE
+
+override_dh_auto_build:
+	dh_auto_build --parallel -- telepathy-qt5-service
+
+override_dh_auto_install:
+	cd $(BUILDDIR) && cmake -DCOMPONENT=service_headers -DCMAKE_INSTALL_PREFIX=../libtelepathy-qt5-service-dev/usr -P cmake_install.cmake 
+	cd $(BUILDDIR) && cmake -DCOMPONENT=service_libs -DCMAKE_INSTALL_PREFIX=../libtelepathy-qt5-service-dev/usr -P cmake_install.cmake
+
+#$(MAKE) preinstall
+#cmake -DCOMPONENT=service_headers -P cmake_install.cmake
