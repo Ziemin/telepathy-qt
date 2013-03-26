@@ -1,3 +1,10 @@
+libtelepathy-qt5-service-dev (0.9.3.3+5) quantal; urgency=low
+
+  * Group support
+  * Rebased for upstream merging
+
+ -- Matthias Gehre <M.Gehre@gmx.de>  Mon, 25 Mar 2013 23:26:34 -0500
+
 libtelepathy-qt5-service-dev (0.9.3.3+4) quantal; urgency=low
 
   * Rename source package
