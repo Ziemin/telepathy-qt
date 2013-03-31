@@ -327,5 +327,54 @@ private:
     Private *mPriv;
 };
 
+class TP_QT_EXPORT BaseChannelRoomInterface : public AbstractChannelInterface
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(BaseChannelRoomInterface)
+
+public:
+    static BaseChannelRoomInterfacePtr create(const QString &roomName,
+                                              const QString &server,
+                                              const QString &creator,
+                                              uint creatorHandle,
+                                              qlonglong creationTimestamp) {
+        return BaseChannelRoomInterfacePtr(new BaseChannelRoomInterface(roomName,
+                                                                        server,
+                                                                        creator,
+                                                                        creatorHandle,
+                                                                        creationTimestamp));
+    }
+    template<typename BaseChannelRoomInterfaceSubclass>
+    static SharedPtr<BaseChannelRoomInterfaceSubclass> create(const QString &roomName,
+                                                              const QString &server,
+                                                              const QString &creator,
+                                                              uint creatorHandle,
+                                                              qlonglong creationTimestamp) {
+        return SharedPtr<BaseChannelRoomInterfaceSubclass>(
+                   new BaseChannelRoomInterfaceSubclass(roomName,
+                                                        server,
+                                                        creator,
+                                                        creatorHandle,
+                                                        creationTimestamp));
+    }
+    virtual ~BaseChannelRoomInterface();
+
+    QVariantMap immutableProperties() const;
+
+private:
+    BaseChannelRoomInterface(const QString &roomName,
+                             const QString &server,
+                             const QString &creator,
+                             uint creatorHandle,
+                             qlonglong creationTimestamp);
+    void createAdaptor();
+
+    class Adaptee;
+    friend class Adaptee;
+    struct Private;
+    friend struct Private;
+    Private *mPriv;
+};
+
 }
 #endif

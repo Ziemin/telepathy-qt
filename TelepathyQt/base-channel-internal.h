@@ -234,4 +234,25 @@ public:
     BaseChannelGroupInterface *mInterface;
 };
 
+class TP_QT_NO_EXPORT BaseChannelRoomInterface::Adaptee : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString roomName READ roomName)
+    Q_PROPERTY(QString server READ server)
+    Q_PROPERTY(QString creator READ creator)
+    Q_PROPERTY(uint creatorHandle READ creatorHandle)
+    Q_PROPERTY(qlonglong creationTimestamp READ creationTimestamp)
+public:
+    Adaptee(BaseChannelRoomInterface *interface);
+    ~Adaptee();
+
+    QString roomName() const;
+    QString server() const;
+    QString creator() const;
+    uint creatorHandle() const;
+    qlonglong creationTimestamp() const;
+public:
+    BaseChannelRoomInterface *mInterface;
+};
+
 }

@@ -1233,4 +1233,128 @@ void BaseChannelGroupInterface::removeMembers(const Tp::UIntList& handles)
         emit mPriv->adaptee->membersChanged(QString(), Tp::UIntList(), removed, Tp::UIntList(), Tp::UIntList(), 0, ChannelGroupChangeReasonNone);
 }
 
+//Chan.I.Room
+BaseChannelRoomInterface::Adaptee::Adaptee(BaseChannelRoomInterface *interface)
+    : QObject(interface),
+      mInterface(interface)
+{
+}
+
+BaseChannelRoomInterface::Adaptee::~Adaptee()
+{
+}
+
+struct TP_QT_NO_EXPORT BaseChannelRoomInterface::Private {
+    Private(BaseChannelRoomInterface *parent,
+            const QString &roomName,
+            const QString &server,
+            const QString &creator,
+            uint creatorHandle,
+            qlonglong creationTimestamp)
+        : roomName(roomName),
+          server(server),
+          creator(creator),
+          creatorHandle(creatorHandle),
+          creationTimestamp(creationTimestamp),
+          adaptee(new BaseChannelRoomInterface::Adaptee(parent)) {
+    }
+    const QString roomName;
+    const QString server;
+    const QString creator;
+    uint creatorHandle;
+    qlonglong creationTimestamp;
+    BaseChannelRoomInterface::Adaptee *adaptee;
+};
+
+QString BaseChannelRoomInterface::Adaptee::roomName() const
+{
+    return mInterface->mPriv->roomName;
+}
+
+QString BaseChannelRoomInterface::Adaptee::server() const
+{
+    return mInterface->mPriv->server;
+}
+
+QString BaseChannelRoomInterface::Adaptee::creator() const
+{
+    return mInterface->mPriv->creator;
+}
+
+uint BaseChannelRoomInterface::Adaptee::creatorHandle() const
+{
+    return mInterface->mPriv->creatorHandle;
+}
+
+qlonglong BaseChannelRoomInterface::Adaptee::creationTimestamp() const
+{
+    return mInterface->mPriv->creationTimestamp;
+}
+
+
+/**
+ * \class BaseChannelRoomInterface
+ * \ingroup servicecm
+ * \headerfile TelepathyQt/base-channel.h <TelepathyQt/BaseChannel>
+ *
+ * \brief Base class for implementations of Channel.Interface.Room
+ *
+ */
+
+/**
+ * Class constructor.
+ */
+BaseChannelRoomInterface::BaseChannelRoomInterface(const QString &roomName,
+                                                   const QString &server,
+                                                   const QString &creator,
+                                                   uint creatorHandle,
+                                                   qlonglong creationTimestamp)
+    : AbstractChannelInterface(TP_QT_IFACE_CHANNEL_INTERFACE_ROOM),
+      mPriv(new Private(this,
+                        roomName,
+                        server,
+                        creator,
+                        creatorHandle,
+                        creationTimestamp))
+{
+}
+
+/**
+ * Class destructor.
+ */
+BaseChannelRoomInterface::~BaseChannelRoomInterface()
+{
+    delete mPriv;
+}
+
+/**
+ * Return the immutable properties of this interface.
+ *
+ * Immutable properties cannot change after the interface has been registered
+ * on a service on the bus with registerInterface().
+ *
+ * \return The immutable properties of this interface.
+ */
+QVariantMap BaseChannelRoomInterface::immutableProperties() const
+{
+    QVariantMap map;
+    map.insert(TP_QT_IFACE_CHANNEL_INTERFACE_ROOM + QLatin1String(".RoomName"),
+               QVariant::fromValue(mPriv->roomName));
+    map.insert(TP_QT_IFACE_CHANNEL_INTERFACE_ROOM + QLatin1String(".Server"),
+               QVariant::fromValue(mPriv->server));
+    map.insert(TP_QT_IFACE_CHANNEL_INTERFACE_ROOM + QLatin1String(".Creator"),
+               QVariant::fromValue(mPriv->creator));
+    map.insert(TP_QT_IFACE_CHANNEL_INTERFACE_ROOM + QLatin1String(".CreatorHandle"),
+               QVariant::fromValue(mPriv->creatorHandle));
+    map.insert(TP_QT_IFACE_CHANNEL_INTERFACE_ROOM + QLatin1String(".CreationTimestamp"),
+               QVariant::fromValue(mPriv->creationTimestamp));
+    return map;
+}
+
+void BaseChannelRoomInterface::createAdaptor()
+{
+    (void) new Service::ChannelInterfaceRoomAdaptor(dbusObject()->dbusConnection(),
+            mPriv->adaptee, dbusObject());
+}
+
 }
