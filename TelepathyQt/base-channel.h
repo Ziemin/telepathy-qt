@@ -414,5 +414,43 @@ private:
     Private *mPriv;
 };
 
+class TP_QT_EXPORT BaseChannelRoomListType : public AbstractChannelInterface
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(BaseChannelRoomListType)
+
+public:
+    static BaseChannelRoomListTypePtr create(const QString &server) {
+        return BaseChannelRoomListTypePtr(new BaseChannelRoomListType(server));
+    }
+    template<typename BaseChannelRoomListTypeSubclass>
+    static SharedPtr<BaseChannelRoomListTypeSubclass> create(const QString &server) {
+        return SharedPtr<BaseChannelRoomListTypeSubclass>(
+                   new BaseChannelRoomListTypeSubclass(server));
+    }
+    virtual ~BaseChannelRoomListType();
+
+    QVariantMap immutableProperties() const;
+
+    typedef Callback1<void, DBusError*> ListRoomsCallback;
+    void setListRoomsCallback(const ListRoomsCallback &cb);
+
+    typedef Callback1<void, DBusError*> StopListingCallback;
+    void setStopListingCallback(const StopListingCallback &cb);
+
+    void setListingRooms(bool listingRooms);
+    void gotRooms(const Tp::RoomInfoList& rooms);
+
+private:
+    BaseChannelRoomListType(const QString &server);
+    void createAdaptor();
+
+    class Adaptee;
+    friend class Adaptee;
+    struct Private;
+    friend struct Private;
+    Private *mPriv;
+};
+
 }
 #endif

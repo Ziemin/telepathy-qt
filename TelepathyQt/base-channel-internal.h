@@ -278,4 +278,24 @@ public:
     BaseChannelSubjectInterface *mInterface;
 };
 
+class TP_QT_NO_EXPORT BaseChannelRoomListType::Adaptee : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString server READ server)
+public:
+    Adaptee(BaseChannelRoomListType *interface);
+    ~Adaptee();
+
+    QString server() const;
+public Q_SLOTS:
+    void getListingRooms(const Tp::Service::ChannelTypeRoomListAdaptor::GetListingRoomsContextPtr &context);
+    void listRooms(const Tp::Service::ChannelTypeRoomListAdaptor::ListRoomsContextPtr &context);
+    void stopListing(const Tp::Service::ChannelTypeRoomListAdaptor::StopListingContextPtr &context);
+Q_SIGNALS:
+    void gotRooms(const Tp::RoomInfoList& rooms);
+    void listingRooms(bool listing);
+public:
+    BaseChannelRoomListType *mInterface;
+};
+
 }

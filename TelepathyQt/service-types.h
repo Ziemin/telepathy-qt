@@ -54,6 +54,7 @@ class BaseChannelCaptchaAuthenticationInterface;
 class BaseChannelGroupInterface;
 class BaseChannelRoomInterface;
 class BaseChannelSubjectInterface;
+class BaseChannelRoomListType;
 class DBusService;
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
@@ -80,6 +81,7 @@ typedef SharedPtr<BaseChannelCaptchaAuthenticationInterface> BaseChannelCaptchaA
 typedef SharedPtr<BaseChannelGroupInterface> BaseChannelGroupInterfacePtr;
 typedef SharedPtr<BaseChannelRoomInterface> BaseChannelRoomInterfacePtr;
 typedef SharedPtr<BaseChannelSubjectInterface> BaseChannelSubjectInterfacePtr;
+typedef SharedPtr<BaseChannelRoomListType> BaseChannelRoomListTypePtr;
 typedef SharedPtr<DBusService> DBusServicePtr;
 
 #endif /* DOXYGEN_SHOULD_SKIP_THIS */

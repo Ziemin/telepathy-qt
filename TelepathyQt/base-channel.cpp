@@ -1501,4 +1501,140 @@ void BaseChannelSubjectInterface::setCanSet(bool canSet)
     mPriv->canSet = canSet;
 }
 
+//Chan.T.RoomList
+BaseChannelRoomListType::Adaptee::Adaptee(BaseChannelRoomListType *interface)
+    : QObject(interface),
+      mInterface(interface)
+{
+}
+
+BaseChannelRoomListType::Adaptee::~Adaptee()
+{
+}
+
+struct TP_QT_NO_EXPORT BaseChannelRoomListType::Private {
+    Private(BaseChannelRoomListType *parent, const QString &server)
+        : server(server),
+          listingRooms(false),
+          adaptee(new BaseChannelRoomListType::Adaptee(parent)) {
+    }
+    const QString server;
+    bool listingRooms;
+    ListRoomsCallback listRoomsCB;
+    StopListingCallback stopListingCB;
+    BaseChannelRoomListType::Adaptee *adaptee;
+};
+
+QString BaseChannelRoomListType::Adaptee::server() const
+{
+    return mInterface->mPriv->server;
+}
+
+void BaseChannelRoomListType::Adaptee::getListingRooms(const Tp::Service::ChannelTypeRoomListAdaptor::GetListingRoomsContextPtr &context)
+{
+    context->setFinished(mInterface->mPriv->listingRooms);
+}
+
+void BaseChannelRoomListType::Adaptee::listRooms(const Tp::Service::ChannelTypeRoomListAdaptor::ListRoomsContextPtr &context)
+{
+    debug() << "BaseChannelRoomListType::Adaptee::listRooms";
+    if (!mInterface->mPriv->listRoomsCB.isValid()) {
+        context->setFinishedWithError(TP_QT_ERROR_NOT_IMPLEMENTED, QLatin1String("Not implemented"));
+        return;
+    }
+    DBusError error;
+    mInterface->mPriv->listRoomsCB(&error);
+    if (error.isValid()) {
+        context->setFinishedWithError(error.name(), error.message());
+        return;
+    }
+    context->setFinished();
+}
+
+void BaseChannelRoomListType::Adaptee::stopListing(const Tp::Service::ChannelTypeRoomListAdaptor::StopListingContextPtr &context)
+{
+    debug() << "BaseChannelRoomListType::Adaptee::stopListing";
+    if (!mInterface->mPriv->stopListingCB.isValid()) {
+        context->setFinishedWithError(TP_QT_ERROR_NOT_IMPLEMENTED, QLatin1String("Not implemented"));
+        return;
+    }
+    DBusError error;
+    mInterface->mPriv->stopListingCB(&error);
+    if (error.isValid()) {
+        context->setFinishedWithError(error.name(), error.message());
+        return;
+    }
+    context->setFinished();
+}
+
+/**
+ * \class BaseChannelRoomListType
+ * \ingroup servicecm
+ * \headerfile TelepathyQt/base-channel.h <TelepathyQt/BaseChannel>
+ *
+ * \brief Base class for implementations of Channel.Type.RoomList
+ *
+ */
+
+/**
+ * Class constructor.
+ */
+BaseChannelRoomListType::BaseChannelRoomListType(const QString &server)
+    : AbstractChannelInterface(TP_QT_IFACE_CHANNEL_TYPE_ROOM_LIST),
+      mPriv(new Private(this, server))
+{
+}
+
+/**
+ * Class destructor.
+ */
+BaseChannelRoomListType::~BaseChannelRoomListType()
+{
+    delete mPriv;
+}
+
+/**
+ * Return the immutable properties of this interface.
+ *
+ * Immutable properties cannot change after the interface has been registered
+ * on a service on the bus with registerInterface().
+ *
+ * \return The immutable properties of this interface.
+ */
+QVariantMap BaseChannelRoomListType::immutableProperties() const
+{
+    QVariantMap map;
+    map.insert(TP_QT_IFACE_CHANNEL_TYPE_ROOM_LIST + QLatin1String(".Server"),
+               QVariant::fromValue(mPriv->server));
+    return map;
+}
+
+void BaseChannelRoomListType::createAdaptor()
+{
+    (void) new Service::ChannelTypeRoomListAdaptor(dbusObject()->dbusConnection(),
+            mPriv->adaptee, dbusObject());
+}
+
+void BaseChannelRoomListType::setListRoomsCallback(const ListRoomsCallback &cb)
+{
+    mPriv->listRoomsCB = cb;
+}
+
+void BaseChannelRoomListType::setStopListingCallback(const StopListingCallback &cb)
+{
+    mPriv->stopListingCB = cb;
+}
+
+void BaseChannelRoomListType::setListingRooms(bool listingRooms)
+{
+    if(listingRooms != mPriv->listingRooms)
+        emit mPriv->adaptee->listingRooms(listingRooms);
+    mPriv->listingRooms = listingRooms;
+}
+
+void BaseChannelRoomListType::gotRooms(const Tp::RoomInfoList& rooms)
+{
+    emit mPriv->adaptee->gotRooms(rooms);
+}
+
 }
