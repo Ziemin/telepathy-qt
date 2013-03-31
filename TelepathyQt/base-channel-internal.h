@@ -255,4 +255,27 @@ public:
     BaseChannelRoomInterface *mInterface;
 };
 
+class TP_QT_NO_EXPORT BaseChannelSubjectInterface::Adaptee : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(QString subject READ subject)
+    Q_PROPERTY(QString actor READ actor)
+    Q_PROPERTY(uint actorHandle READ actorHandle)
+    Q_PROPERTY(qlonglong timestamp READ timestamp)
+    Q_PROPERTY(bool canSet READ canSet)
+public:
+    Adaptee(BaseChannelSubjectInterface *interface);
+    ~Adaptee();
+
+    QString subject() const;
+    QString actor() const;
+    uint actorHandle() const;
+    qlonglong timestamp() const;
+    bool canSet() const;
+public Q_SLOTS:
+    void setSubject(const QString& subject, const Tp::Service::ChannelInterfaceSubjectAdaptor::SetSubjectContextPtr &context);
+public:
+    BaseChannelSubjectInterface *mInterface;
+};
+
 }

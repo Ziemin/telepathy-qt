@@ -1357,4 +1357,148 @@ void BaseChannelRoomInterface::createAdaptor()
             mPriv->adaptee, dbusObject());
 }
 
+//Chan.I.Subject
+BaseChannelSubjectInterface::Adaptee::Adaptee(BaseChannelSubjectInterface *interface)
+    : QObject(interface),
+      mInterface(interface)
+{
+}
+
+BaseChannelSubjectInterface::Adaptee::~Adaptee()
+{
+}
+
+struct TP_QT_NO_EXPORT BaseChannelSubjectInterface::Private {
+    Private(BaseChannelSubjectInterface *parent)
+        : actorHandle(0),
+          timestamp(std::numeric_limits<qlonglong>::max()),
+          canSet(false),
+          adaptee(new BaseChannelSubjectInterface::Adaptee(parent)) {
+    }
+    QString subject;
+    QString actor;
+    uint actorHandle;
+    qlonglong timestamp;
+    bool canSet;
+    SetSubjectCallback setSubjectCB;
+    BaseChannelSubjectInterface::Adaptee *adaptee;
+};
+
+QString BaseChannelSubjectInterface::Adaptee::subject() const
+{
+    return mInterface->mPriv->subject;
+}
+
+QString BaseChannelSubjectInterface::Adaptee::actor() const
+{
+    return mInterface->mPriv->actor;
+}
+
+uint BaseChannelSubjectInterface::Adaptee::actorHandle() const
+{
+    return mInterface->mPriv->actorHandle;
+}
+
+qlonglong BaseChannelSubjectInterface::Adaptee::timestamp() const
+{
+    return mInterface->mPriv->timestamp;
+}
+
+bool BaseChannelSubjectInterface::Adaptee::canSet() const
+{
+    return mInterface->mPriv->canSet;
+}
+
+void BaseChannelSubjectInterface::Adaptee::setSubject(const QString& subject,
+                                                      const Tp::Service::ChannelInterfaceSubjectAdaptor::SetSubjectContextPtr &context)
+{
+    debug() << "BaseChannelSubjectInterface::Adaptee::setSubject";
+    if (!mInterface->mPriv->setSubjectCB.isValid()) {
+        context->setFinishedWithError(TP_QT_ERROR_NOT_IMPLEMENTED, QLatin1String("Not implemented"));
+        return;
+    }
+    DBusError error;
+    mInterface->mPriv->setSubjectCB(subject, &error);
+    if (error.isValid()) {
+        context->setFinishedWithError(error.name(), error.message());
+        return;
+    }
+    context->setFinished();
+}
+
+/**
+ * \class BaseChannelSubjectInterface
+ * \ingroup servicecm
+ * \headerfile TelepathyQt/base-channel.h <TelepathyQt/BaseChannel>
+ *
+ * \brief Base class for implementations of Channel.Interface.Subject
+ *
+ */
+
+/**
+ * Class constructor.
+ */
+BaseChannelSubjectInterface::BaseChannelSubjectInterface()
+    : AbstractChannelInterface(TP_QT_IFACE_CHANNEL_INTERFACE_SUBJECT),
+      mPriv(new Private(this))
+{
+}
+
+/**
+ * Class destructor.
+ */
+BaseChannelSubjectInterface::~BaseChannelSubjectInterface()
+{
+    delete mPriv;
+}
+
+/**
+ * Return the immutable properties of this interface.
+ *
+ * Immutable properties cannot change after the interface has been registered
+ * on a service on the bus with registerInterface().
+ *
+ * \return The immutable properties of this interface.
+ */
+QVariantMap BaseChannelSubjectInterface::immutableProperties() const
+{
+    return QVariantMap();
+}
+
+void BaseChannelSubjectInterface::createAdaptor()
+{
+    (void) new Service::ChannelInterfaceSubjectAdaptor(dbusObject()->dbusConnection(),
+            mPriv->adaptee, dbusObject());
+}
+
+void BaseChannelSubjectInterface::setSetSubjectCallback(const SetSubjectCallback &cb)
+{
+    mPriv->setSubjectCB = cb;
+}
+
+void BaseChannelSubjectInterface::setSubject(const QString &subject)
+{
+    mPriv->subject = subject;
+}
+
+void BaseChannelSubjectInterface::setActor(const QString &actor)
+{
+    mPriv->actor = actor;
+}
+
+void BaseChannelSubjectInterface::setActorHandle(uint actorHandle)
+{
+    mPriv->actorHandle = actorHandle;
+}
+
+void BaseChannelSubjectInterface::setTimestamp(qlonglong timestamp)
+{
+    mPriv->timestamp = timestamp;
+}
+
+void BaseChannelSubjectInterface::setCanSet(bool canSet)
+{
+    mPriv->canSet = canSet;
+}
+
 }

@@ -376,5 +376,43 @@ private:
     Private *mPriv;
 };
 
+class TP_QT_EXPORT BaseChannelSubjectInterface : public AbstractChannelInterface
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(BaseChannelSubjectInterface)
+
+public:
+    static BaseChannelSubjectInterfacePtr create() {
+        return BaseChannelSubjectInterfacePtr(new BaseChannelSubjectInterface());
+    }
+    template<typename BaseChannelSubjectInterfaceSubclass>
+    static SharedPtr<BaseChannelSubjectInterfaceSubclass> create() {
+        return SharedPtr<BaseChannelSubjectInterfaceSubclass>(
+                   new BaseChannelSubjectInterfaceSubclass());
+    }
+    virtual ~BaseChannelSubjectInterface();
+
+    QVariantMap immutableProperties() const;
+
+    typedef Callback2<void, const QString&, DBusError*> SetSubjectCallback;
+    void setSetSubjectCallback(const SetSubjectCallback &cb);
+
+    void setSubject(const QString &subject);
+    void setActor(const QString &actor);
+    void setActorHandle(uint actorHandle);
+    void setTimestamp(qlonglong timestamp);
+    void setCanSet(bool canSet);
+
+private:
+    BaseChannelSubjectInterface();
+    void createAdaptor();
+
+    class Adaptee;
+    friend class Adaptee;
+    struct Private;
+    friend struct Private;
+    Private *mPriv;
+};
+
 }
 #endif
