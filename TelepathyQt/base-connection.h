@@ -304,6 +304,9 @@ public:
     typedef Callback3<void, const Tp::UIntList&, const QString&, DBusError*> RequestSubscriptionCallback;
     void setRequestSubscriptionCallback(const RequestSubscriptionCallback &cb);
 
+    typedef Callback2<void, const Tp::UIntList&, DBusError*> RemoveContactsCallback;
+    void setRemoveContactsCallback(const RemoveContactsCallback &cb);
+
     void contactsChangedWithID(const Tp::ContactSubscriptionMap &changes, const Tp::HandleIdentifierMap &identifiers, const Tp::HandleIdentifierMap &removals);
 protected:
     BaseConnectionContactListInterface();

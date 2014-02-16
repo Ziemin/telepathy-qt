@@ -180,7 +180,7 @@ Q_SIGNALS:
                 void getContactListAttributes(const QStringList &interfaces, bool hold, const Tp::Service::ConnectionInterfaceContactListAdaptor::GetContactListAttributesContextPtr &context);
             void requestSubscription(const Tp::UIntList &contacts, const QString &message, const Tp::Service::ConnectionInterfaceContactListAdaptor::RequestSubscriptionContextPtr &context);
             //void authorizePublication(const Tp::UIntList &contacts, const Tp::Service::ConnectionInterfaceContactListAdaptor::AuthorizePublicationContextPtr &context);
-            //void removeContacts(const Tp::UIntList &contacts, const Tp::Service::ConnectionInterfaceContactListAdaptor::RemoveContactsContextPtr &context);
+            void removeContacts(const Tp::UIntList &contacts, const Tp::Service::ConnectionInterfaceContactListAdaptor::RemoveContactsContextPtr &context);
             //void unsubscribe(const Tp::UIntList &contacts, const Tp::Service::ConnectionInterfaceContactListAdaptor::UnsubscribeContextPtr &context);
             //void unpublish(const Tp::UIntList &contacts, const Tp::Service::ConnectionInterfaceContactListAdaptor::UnpublishContextPtr &context);
             //void download(const Tp::Service::ConnectionInterfaceContactListAdaptor::DownloadContextPtr &context);

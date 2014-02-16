@@ -1070,6 +1070,7 @@ struct TP_QT_NO_EXPORT BaseConnectionContactListInterface::Private {
     bool downloadAtConnection;
     GetContactListAttributesCallback getContactListAttributesCB;
     RequestSubscriptionCallback requestSubscriptionCB;
+    RemoveContactsCallback removeContactsCB;
     BaseConnectionContactListInterface::Adaptee *adaptee;
 };
 
@@ -1160,6 +1161,10 @@ void BaseConnectionContactListInterface::setRequestSubscriptionCallback(const Re
     mPriv->requestSubscriptionCB = cb;
 }
 
+void BaseConnectionContactListInterface::setRemoveContactsCallback(const RemoveContactsCallback &cb) {
+    mPriv->removeContactsCB = cb;
+}
+
 void BaseConnectionContactListInterface::contactsChangedWithID(const Tp::ContactSubscriptionMap &changes, const Tp::HandleIdentifierMap &identifiers, const Tp::HandleIdentifierMap &removals)
 {
     emit mPriv->adaptee->contactsChangedWithID(changes, identifiers, removals);
@@ -1215,6 +1220,22 @@ void BaseConnectionContactListInterface::Adaptee::requestSubscription(const Tp::
     }
     DBusError error;
     mInterface->mPriv->requestSubscriptionCB(contacts, message, &error);
+    if (error.isValid()) {
+        context->setFinishedWithError(error.name(), error.message());
+        return;
+    }
+    context->setFinished();
+}
+
+void BaseConnectionContactListInterface::Adaptee::removeContacts(const Tp::UIntList &contacts, 
+        const Tp::Service::ConnectionInterfaceContactListAdaptor::RemoveContactsContextPtr &context)
+{
+    if(!mInterface->mPriv->removeContactsCB.isValid()) {
+        context->setFinishedWithError(TP_QT_ERROR_NOT_IMPLEMENTED, QLatin1String("Not implemented"));
+        return;
+    }
+    DBusError error;
+    mInterface->mPriv->removeContactsCB(contacts, &error);
     if (error.isValid()) {
         context->setFinishedWithError(error.name(), error.message());
         return;
