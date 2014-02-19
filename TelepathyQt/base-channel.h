@@ -198,12 +198,13 @@ protected:
 private Q_SLOTS:
     void pendingMessagesRemoved(const Tp::UIntList &messageIDs);
     void messageReceived(const Tp::MessagePartList &message);
-private:
+protected:
     BaseChannelMessagesInterface(BaseChannelTextType* textType,
                                  QStringList supportedContentTypes,
                                  Tp::UIntList messageTypes,
                                  uint messagePartSupportFlags,
                                  uint deliveryReportingSupport);
+private:
     void createAdaptor();
 
     class Adaptee;
